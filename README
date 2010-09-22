@@ -1,0 +1,21 @@
+Besides pdflatex, compile-time dependencies include:
+
+* cclicenses.sty
+* complexity.sty
+
+On Ubuntu, the necessary packages are:
+
+* texlive-latex-base
+* texlive-fonts-recommended
+* texlive-science
+
+To compile this article, run 
+
+  compile-paper.sh
+
+The output is sticks.pdf.
+
+Except where otherwise noted, both the LaTeX markup and the content of the
+article are made available under the terms of the Creative Commons
+Attribution-ShareAlike 3.0 license,
+http://creativecommons.org/licenses/by-sa/3.0/.
