@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{aliascnt} % for correct autoref labeling of non-theorems
+\usepackage{amsthm} % for theorems, definitions, lemmas, and styles
+\usepackage{complexity}
+
+% Define theorem, lemma, and definition environments and corresponding styles.
+% Lemmata, corollaries, and definitions are numbered with the same counter as
+% that for theorems. We have to do some black magic to get the \autoref labels
+% to work correctly.
+\newtheorem{theorem}{Theorem}[section]
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{definition}{theorem}
+\theoremstyle{definition} \newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+
+% define lemma, corollary, and definition context labels for \autoref command
+% (theorem is already defined)
+\newcommand{\lemmaname}{Lemma}
+\newcommand{\corollaryname}{Corollary}
+\newcommand{\definitionname}{Definition}
+
+\newcommand{\triple}[3]{\langle#1,#2,#3\rangle} % generalization of pairing fn.
+
+\begin{document}
+  \begin{definition}
+    $\lang{3STICKS}=\{\triple{\Sigma}{T}{k}|\Sigma$ is a finite alphabet with
+    $|\Sigma|\geq2$, $T\subseteq\Sigma^3$ is a multiset with $|T|\geq1$, $k\geq
+    3$, and $\exists c\colon \{1,\ldots,k\}\to\Sigma$ such that
+    $\forall(x,y,z)\in T$, $\exists n\in\{1,\ldots,k-2\}$ such that $x=c(n)$,
+    $y=c(n+1)$, and $y=c(n+2)\}$
+  \end{definition}
+\end{document}
