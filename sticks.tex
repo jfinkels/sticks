@@ -4,15 +4,21 @@
   noline, % omit vertical block lines
   linesnumbered, % number lines
   boxed, % put a box around the algorithm
-  %oldcommands % newer versions of package have different command names
 ]{algorithm2e} % for creating pseudocode
 \usepackage{amsfonts} % for \mathbb
 \usepackage{amsmath} % for \implies
 \usepackage{amsthm} % for theorems, definitions, lemmas, and styles
 \usepackage{complexity}
+\usepackage[
+  backref=page, % backlinks in references
+  pdftitle={On the computational complexity of the sticks problem},
+  pdfauthor={Jeffrey Finkelstein}
+]{hyperref} % for pdf links when rendering \ref and \cite commands
 
 % don't print semicolons in pseudocode algorithms
-\dontprintsemicolon
+\DontPrintSemicolon
+\SetKwIF{If}{ElseIf}{Else}{if}{}{else if}{else}{end if}%
+\SetKwFor{ForEach}{for each}{}{end foreach}%
 
 % Define theorem, lemma, and definition environments and corresponding styles.
 % Lemmata, corollaries, and definitions are numbered with the same counter as
@@ -38,15 +44,89 @@
 \newcommand{\corollaryname}{Corollary}
 \newcommand{\definitionname}{Definition}
 
-\newcommand{\triple}[3]{\langle#1,#2,#3\rangle} % generalization of pairing fn.
+\newcommand{\dash}{\mbox{-}}
+\newcommand{\defn}[1]{\emph{#1}}
+\newcommand{\mor}{$\leq_m^p$}
+\newcommand{\plain}[1]{\,\text{#1}\,}
 \newcommand{\powerset}[1]{\mathcal{P}(#1)} % the power set operator
+\newcommand{\triple}[3]{\langle#1,#2,#3\rangle} % generalization of pairing fn.
 
 \newenvironment{langdef}[1]{\begin{definition}{\lang{#1}}}{\end{definition}}
 \newenvironment{instance}{\\Instance:}{}
 \newenvironment{question}{\\Question:}{}
 
 \begin{document}
-  \begin{langdef}{3USTICKS}\label{def:3usticks}
+
+  \section{Variants of similar difficulty}
+
+  \begin{langdef}{ASYM\dash STICKS}\label{def:asym-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite set of sticks
+      $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
+        all tiles $(x, y, z)\in T$, there exists a position
+        $n\in\{1,\ldots,k-2\}$ such that $c(n)=x$, $c(n+1)=y$ and
+        $c(n+2)=z$?
+    \end{question}
+  \end{langdef}
+
+  \begin{langdef}{SYM\dash STICKS}\label{def:sym-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite set of sticks
+      $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
+        all tiles $(x, y, z)\in T$, there exists a position
+        $n\in\{1,\ldots,k-2\}$ such that either $(c(n)=x$, $c(n+1)=y$ and
+        $c(n+2)=z)$ or $(c(n)=z$, $c(n+1)=y$ and $c(n+2)=x)$?
+    \end{question}
+  \end{langdef}
+
+  \begin{langdef}{CIRCULAR\dash ASYM\dash STICKS}\label{def:circular-asym-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite set of sticks
+      $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a layout $c\colon\{0,\ldots,k-1\}\to\Sigma$ such that
+        for all tiles $(x, y, z)\in T$, there exists a position
+        $n\in\{0,\ldots,k-1\}$ such that $c(n \plain{mod} k)=x$, $c(n+1
+        \plain{mod} k)=y$ and $c(n+2 \plain{mod} k)=z$?
+    \end{question}
+  \end{langdef}
+
+  \begin{langdef}{CIRCULAR\dash SYM\dash STICKS}\label{def:circular-sym-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite set of sticks
+      $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a layout $c\colon\{0,\ldots,k-1\}\to\Sigma$ such that
+        for all tiles $(x, y, z)\in T$, there exists a position
+        $n\in\{0,\ldots,k-1\}$ such that either $(c(n \plain{mod} k)=x$, $c(n+1
+        \plain{mod} k)=y$ and $c(n+2 \plain{mod} k)=z)$ or $(c(n \plain{mod}
+        k)=z$, $c(n+1 \plain{mod} k)=y$ and $c(n+2 \plain{mod} k)=x)$?
+    \end{question}
+  \end{langdef}
+
+  \begin{lemma}
+    \lang{ASYM\dash STICKS}\mor\lang{CIRCULAR\dash ASYM\dash STICKS}
+  \end{lemma}
+  \begin{proof}
+  \end{proof}
+
+  \begin{lemma}
+    \lang{SYM\dash STICKS}\mor\lang{CIRCULAR\dash SYM\dash STICKS}
+  \end{lemma}
+  \begin{proof}
+  \end{proof}
+
+  \section{\NP-complete variants}
+
+  \begin{langdef}{ASYM\dash SET\dash STICKS}\label{def:asym-set-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
       $T\subseteq\powerset{\Sigma}^3$, and $k\in\mathbb{N}$
@@ -55,64 +135,138 @@
       Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
         all tiles $(X, Y, Z)\in T$, there exists a position
         $n\in\{1,\ldots,k-2\}$ such that $c(n)\in X$, $c(n+1)\in Y$ and
-        $c(n+2)\in Z$.
+        $c(n+2)\in Z$?
     \end{question}
   \end{langdef}
 
-  % TODO add ref, GJ p.237 [SS4] points to Lawler 78
-  \begin{langdef}{UNITSEQUENCING}\label{def:useq}
+  \begin{definition}\label{def:hampath}
+    Suppose $G=(V,E)$ is a directed graph, where $|V|=n$. $G$ contains a
+    \defn{Hamiltonian path} if $\exists p\colon\{1,\ldots,n\}\to V$, a
+    bijection, such that $\forall i\in\{1,\ldots,n-1\}$, $(p(i), p(i+1))\in E$.
+  \end{definition}
+
+  \begin{langdef}{HAMPATH}\label{def:hampathproblem}
     \begin{instance}
-      a finite set of tasks $T$, a partial order $\leq$ on $T$, a length
-      $\ell(t)\in\{0,1\}$ for each task $t\in T$, and $k\in\mathbb{N}$
+      a directed graph $G$
     \end{instance}
     \begin{question}
-      Does there exist a one-processor schedule for $T$, i.e. an injective
-      function $\sigma\colon T\to\mathbb{Z}_0^+$, such that $t_1\leq
-      t_2\implies\sigma(t_1)+\ell(t_1)\leq\sigma(t_2)$ and $\sum_{t\in
-        T}{\sigma(t)+\ell(t)}\leq k$?
+      Does $G$ contain a Hamiltonian path?
     \end{question}
   \end{langdef}
 
-  % TODO reference Lawler 78
-  \begin{lemma}\label{lem:useqnpc}
-    \lang{UNITSEQUENCING} is \NP-complete.
+  \begin{langdef}{SYM\dash SET\dash STICKS}\label{def:sym-set-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite set of sticks
+      $T\subseteq\powerset{\Sigma}^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
+        all tiles $(X, Y, Z)\in T$, there exists a position
+        $n\in\{1,\ldots,k-2\}$ such that either $(c(n)\in X$, $c(n+1)\in Y$ and
+        $c(n+2)\in Z)$ or $(c(n)\in Z$, $c(n+1)\in Y$ and $c(n+2)\in X)$?
+    \end{question}
+  \end{langdef}
+
+  \begin{langdef}{UHAMPATH}\label{def:uhampath}
+    \begin{instance}
+      an undirected graph $G$
+    \end{instance}
+    \begin{question}
+      Does $G$ contain a Hamiltonian path?
+    \end{question}
+  \end{langdef}
+
+  % TODO reference
+  \begin{lemma}\label{lem:hampath-npc}
+    \lang{HAMPATH} is \NP-complete.
   \end{lemma}
   \begin{proof}
   \end{proof}
 
-  \begin{theorem}\label{thm:3usticksnpc}
-    \lang{3USTICKS} is \NP-complete.
+  \begin{theorem}\label{thm:asym-set-sticks-npc}
+    \lang{ASYM\dash SET\dash STICKS} is \NP-complete.
   \end{theorem}
   \begin{proof}
-    The proof is by reduction from \lang{UNITSEQUENCING}. Construct the
-    reduction as follows, given input $\langle T, \leq, \ell(t), k\rangle$.\\
-    \begin{algorithm}[H]
-      $k'\gets3k$\;
-      $\Sigma\gets T$\;
-      $T'\gets\emptyset$\;
-      \For{$t\in T$}{
-        $t'\gets(\{t\}, \{t\}, \{t\})$\;
-        \For{$s\in T\backslash\{t\}$}{
-          \If{$s\leq t$}{
-            $k'\gets k'-1$\;
-            $t'\gets(t'.left\cup\{s\}, t'.middle, t'.right)$\;
-          }
-          \If{$t\leq s$}{
-            $k'\gets k'-1$\;
-            $t'\gets(t'.left, t'.middle, t'.right\cup\{s\})$\;
-          }
+  \end{proof}
+
+  % TODO reference
+  \begin{lemma}\label{lem:uhampath-npc}
+    \lang{UHAMPATH} is \NP-complete.
+  \end{lemma}
+  \begin{proof}
+  \end{proof}
+
+  \begin{theorem}\label{thm:sym-set-sticks-npc}
+    \lang{SYM\dash SET\dash STICKS} is \NP-complete.
+  \end{theorem}
+  \begin{proof}
+  \end{proof}
+
+  \begin{langdef}{ASYM\dash BIN\dash STICKS}\label{def:asym-bin-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite collection of bins $B_1, B_2,
+      \ldots, B_N \subseteq \Sigma^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a selection of one tile from each bin and a layout
+        $c\colon\{1,\ldots,k\}\to\Sigma$ such that for all selected tiles $(x,
+        y, z)$, there exists a position $n\in\{1,\ldots,k-2\}$ such that
+        $c(n)=x$, $c(n+1)=y$ and $c(n+2)=z$?
+    \end{question}
+  \end{langdef}
+
+  \begin{langdef}{SYM\dash BIN\dash STICKS}\label{def:sym-bin-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite collection of bins $B_1, B_2,
+      \ldots, B_N \subseteq \Sigma^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a selection of one tile from each bin and a layout
+        $c\colon\{1,\ldots,k\}\to\Sigma$ such that for all selected tiles $(x,
+        y, z)$, there exists a position $n\in\{1,\ldots,k-2\}$ such that either
+        $(c(n)=x$, $c(n+1)=y$ and $c(n+2)=z)$ or $(c(n)=z$, $c(n+1)=y$ and
+        $c(n+2)=x)$?
+    \end{question}
+  \end{langdef}
+
+  \begin{theorem}\label{thm:asym-bin-sticks-npc}
+    \lang{ASYM\dash BIN\dash STICKS} is \NP-complete.
+  \end{theorem}
+  \begin{proof}
+    The reduction is from \lang{HAMPATH}. Define transducer $f$ as in
+    \autoref{fig:hampath-to-asym-bin-sticks}.
+    \begin{algorithm}\label{fig:hampath-to-asym-bin-sticks}
+      \caption{Reduction from \lang{HAMPATH} to \lang{ASYM\dash BIN\dash
+      STICKS}}
+      \KwIn{$G=(V,E)$, where $V=\{v_1,v_2,\ldots,v_n\}$}
+      $\Sigma\gets V\cup E$\;
+      $k\gets 2n+1$\;
+      $B_i\gets\emptyset$, for all $i\in\{1,\ldots,n\}$\;
+      \ForEach{$i\in\{1,\ldots,n\}$}{
+        \If{$v_i$ has at least one incoming edge and at least one outgoing
+          edge}{
+          $B_i\gets\{(e_{in},v_i,e_{out})|e_{in}, e_{out}\in E\plain{and}
+          e_{in}=(u,v_i)\plain{and} e_{out}=(v_i,w)\plain{for some}u,w\in
+          V\}$\;
         }
-        \eIf{$\ell(t)=1$}{
-          $t'_{left}\gets (t'.left, t'.middle, \{t'_{mid}\})$\;
-          $t'_{right}\gets(\{t'_{mid}\}, t'.middle, t'.right)$\;
-          $k'\gets k'+2$\;
-          $T'\gets T'\cup\{t'_{left}, t'_{right}\}$\;
-        }{
-          $T'\gets T'\cup\{t'\}$\;
+        \If{$v_i$ has at least one incoming edge and no outgoing edges}{
+          $B_i\gets\{(e_{in},v_i,v_i)|e_{in}\in E\plain{and}
+          e_{in}=(u,v_i)\plain{for some}u\in V\}$\;
+        }
+        \If{$v_i$ has no incoming edges and at least one outgoing edge}{
+          $B_i\gets\{(v_i,v_i,e_{out})|e_{out}\in E\plain{and}
+          e_{out}=(v_i, w)\plain{for some}w\in V\}$\;
+        }
+        \If{$v_i$ has no incoming edges and no outgoing edges}{
+          $B_i\gets\{(v_i,v_i,v_i)\}$\;
         }
       }
-      \Return{$\langle\Sigma,T',k'\rangle$}
     \end{algorithm}
   \end{proof}
 
+  \begin{theorem}\label{thm:sym-bin-sticks-npc}
+    \lang{SYM\dash BIN\dash STICKS} is \NP-complete.
+  \end{theorem}
+  \begin{proof}
+  \end{proof}
 \end{document}
