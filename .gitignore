@@ -15,5 +15,6 @@
 *.snm
 *.toc
 
+algorithm2e.sty
 cclicenses.sty
 complexity.sty
