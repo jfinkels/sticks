@@ -1,17 +1,18 @@
-\documentclass{article}
+\documentclass[draft]{article}
 \usepackage{aliascnt} % for correct autoref labeling of non-theorems
 \usepackage[noend, boxed, linesnumbered]{algorithm2e}
 \usepackage{amsfonts} % for \mathbb
 \usepackage{amsmath} % for \implies
 \usepackage{amsthm} % for theorems, definitions, lemmas, and styles
 \usepackage{complexity}
+\usepackage{gensymb} % for \degree
 \usepackage[
   backref=page, % backlinks in references
   pdftitle={On the computational complexity of the sticks problem},
   pdfauthor={Jeffrey Finkelstein}
 ]{hyperref} % for pdf links when rendering \ref and \cite commands
 
-% don't print semicolons in pseudocode algorithms
+% algorithm environment configuration
 \DontPrintSemicolon
 \SetKwIF{If}{ElseIf}{Else}{if}{}{else if}{else}{end if}
 \SetKwFor{ForAll}{for all}{}{end for all}
@@ -30,6 +31,10 @@
 \newtheorem{corollary}[corollary]{Corollary}
 \aliascntresetthe{corollary}
 
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+
 \newaliascnt{definition}{theorem}
 \theoremstyle{definition} \newtheorem{definition}[definition]{Definition}
 \aliascntresetthe{definition}
@@ -47,15 +52,25 @@
 \newcommand{\powerset}[1]{\mathcal{P}(#1)} % the power set operator
 \newcommand{\triple}[3]{\langle#1,#2,#3\rangle} % generalization of pairing fn.
 
+% language shortcuts
+\newcommand{\asticks}{ASYM\dash STICKS}
+\newcommand{\sticks}{SYM\dash STICKS}
+\newcommand{\amsticks}{MULTI\dash ASYM\dash STICKS}
+\newcommand{\msticks}{MULTI\dash SYM\dash STICKS}
+\newcommand{\acsticks}{CIRCULAR\dash ASYM\dash STICKS}
+\newcommand{\csticks}{CIRCULAR\dash SYM\dash STICKS}
+\newcommand{\aisticks}{I\dash ASYM\dash STICKS}
+\newcommand{\isticks}{I\dash SYM\dash STICKS}
+\newcommand{\absticks}{BIN\dash ASYM\dash STICKS}
+\newcommand{\bsticks}{BIN\dash SYM\dash STICKS}
+
 \newenvironment{langdef}[1]{\begin{definition}{\lang{#1}}}{\end{definition}}
 \newenvironment{instance}{\\Instance:}{}
 \newenvironment{question}{\\Question:}{}
 
 \begin{document}
 
-  \section{Variants of similar difficulty}
-
-  \begin{langdef}{ASYM\dash STICKS}\label{def:asym-sticks}
+  \begin{langdef}{\asticks}\label{def:asym-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
       $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
@@ -68,7 +83,10 @@
     \end{question}
   \end{langdef}
 
-  \begin{langdef}{SYM\dash STICKS}\label{def:sym-sticks}
+  We also define the symmetric version of the sticks problem, in which we are
+  allowed to rotate tiles 180\degree.
+
+  \begin{langdef}{\sticks}\label{def:sym-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
       $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
@@ -81,7 +99,54 @@
     \end{question}
   \end{langdef}
 
-  \begin{langdef}{CIRCULAR\dash ASYM\dash STICKS}\label{def:circular-asym-sticks}
+  \section{Variants of similar difficulty}
+
+  \begin{langdef}{\amsticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite \emph{multiset} of sticks
+      $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
+        all tiles $(x, y, z)\in T$, there exists a position
+        $n\in\{1,\ldots,k-2\}$ such that $c(n)=x$, $c(n+1)=y$ and
+        $c(n+2)=z$?
+    \end{question}
+  \end{langdef}
+
+  \begin{proposition}
+    \lang{\amsticks}\mor\lang{\asticks}
+  \end{proposition}
+  \begin{proof}
+    Construct function $f$ defined by
+    $\triple{\Sigma}{T}{k}\mapsto\triple{\Sigma}{T'}{k}$, where $T'$ is a set
+    containing the elements of $T$ without repeats. $f$ can be computed in
+    polynomial time.
+    
+    Suppose $\triple{\Sigma}{T}{k}\in\lang{\amsticks}$, so there is a layout of
+    the tiles from $T$ of length at most $k$. For any repeated tile $t$, no
+    matter the possible overlaps $t$ has in that layout with any other tile,
+    removing it will either result in a layout of the same length (in case each
+    component of the tile was overlapping some other tile) or a layout of
+    smaller length, by simply removing the repeated tile, then sliding the
+    remaining tiles on the left and right together. Therefore
+    $f(\triple{\Sigma}{T}{k})$ has a layout of length at most $k$, so it is in
+    $\lang{\asticks}$.
+
+    For the converse, suppose $f(\triple{\Sigma}{T}{k})\in\lang{\asticks}$, so
+    there is a layout of tiles from $T$, excluding the repeated tiles, of
+    length at most $k$. By placing each identical tile on top of one another,
+    we can achieve a layout with the same length, but using all the repeated
+    tiles as well. Therefore, $\triple{\Sigma}{T}{k}\in\lang{\amsticks}$.
+
+    Thus we have described a correct, polynomial time reduction from
+    \lang{\amsticks} to \lang{\asticks}.
+  \end{proof}
+
+  Instead of considering a linear layout with two endpoints, we might consider
+  the possibility of a layout along the circumference of a circle.
+
+  \begin{langdef}{\acsticks}\label{def:circular-asym-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
       $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
@@ -94,7 +159,7 @@
     \end{question}
   \end{langdef}
 
-  \begin{langdef}{CIRCULAR\dash SYM\dash STICKS}\label{def:circular-sym-sticks}
+  \begin{langdef}{\csticks}\label{def:circular-sym-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
       $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
@@ -108,54 +173,46 @@
     \end{question}
   \end{langdef}
 
-  \begin{lemma}
-    \lang{ASYM\dash STICKS}\mor\lang{CIRCULAR\dash ASYM\dash STICKS}
+  \begin{lemma}\label{lem:sticks-to-circ}
+    \lang{\asticks}\mor\lang{\acsticks}
   \end{lemma}
   \begin{proof}
-    Construct transducer $f$ defined by $\triple{\Sigma}{T}{k} \mapsto
+    Construct function $f$ defined by $\triple{\Sigma}{T}{k} \mapsto
     \triple{\Sigma\cup\{x\}}{T\cup\{(x,x,x)\}}{k+3}$, where
     $x\notin\Sigma$. $f$ can be computed in polynomial time.
 
-    Suppose $\triple{\Sigma}{T}{k}\in\lang{ASYM\dash STICKS}$. Then
+    Suppose $\triple{\Sigma}{T}{k}\in\lang{\asticks}$. Then
     $f(\triple{\Sigma}{T}{k})$ outputs
     $\triple{\Sigma\cup\{x\}}{T\cup\{(x,x,x)\}}{k+3}$, as described
     above. Since $(x,x,x)$ can not overlap with any tile in $T$, it must be
     added without overlap to the layout for a penalty of $3$. Since the linear
     layout of $T$ has length at most $k$, the circular layout of
     $T\cup\{(x,x,x)\}$ has length at most $k+3$. Therefore
-    $f(\triple{\Sigma}{T}{k})\in\lang{CIRCULAR\dash ASYM\dash STICKS}$.
+    $f(\triple{\Sigma}{T}{k})\in\lang{\acsticks}$.
 
-    For the converse, suppose $\triple{\Sigma}{T}{k}\notin\lang{ASYM\dash
-      STICKS}$. Then the shortest layout must have length at least $k+1$. And
-    since $(x, x, x)$ cannot overlap with any tile in $T$, the layout of
-    $f(\triple{\Sigma}{T}{k})$ on the circle must have length at least
-    $(k+1)+3=k+4$, so $f(\triple{\Sigma}{T}{k})\notin\lang{CIRCULAR\dash
-      ASYM\dash STICKS}$.
+    For the converse, suppose
+    $\triple{\Sigma}{T}{k}\notin\lang{\asticks}$. Then the shortest layout must
+    have length at least $k+1$. And since $(x, x, x)$ cannot overlap with any
+    tile in $T$, the layout of $f(\triple{\Sigma}{T}{k})$ on the circle must
+    have length at least $(k+1)+3=k+4$, so
+    $f(\triple{\Sigma}{T}{k})\notin\lang{\acsticks}$.
 
     Thus we have described a correct, polynomial time reduction from
-    $\lang{ASYM\dash STICKS}$ to $\lang{CIRCULAR\dash ASYM\dash STICKS}$.
+    $\lang{\asticks}$ to $\lang{\acsticks}$.
   \end{proof}
 
   \begin{lemma}
-    \lang{SYM\dash STICKS}\mor\lang{CIRCULAR\dash SYM\dash STICKS}
+    \lang{\sticks}\mor\lang{\csticks}
   \end{lemma}
   \begin{proof}
+    The proof of this lemma is the same as the proof of
+    \autoref{lem:sticks-to-circ}, but we allow the possibility of rotating the
+    tiles by 180\degree when choosing a layout.
   \end{proof}
 
   \section{\texorpdfstring{\NP}{NP}-complete variants}
 
-  \begin{langdef}{ASYM\dash SET\dash STICKS}\label{def:asym-set-sticks}
-    \begin{instance}
-      a finite set of symbols $\Sigma$, a finite set of sticks
-      $T\subseteq\powerset{\Sigma}^3$, and $k\in\mathbb{N}$
-    \end{instance}
-    \begin{question}
-      Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
-        all tiles $(X, Y, Z)\in T$, there exists a position
-        $n\in\{1,\ldots,k-2\}$ such that $c(n)\in X$, $c(n+1)\in Y$ and
-        $c(n+2)\in Z$?
-    \end{question}
-  \end{langdef}
+  Recall the definitions of the following \NP-complete problems.
 
   \begin{definition}\label{def:hampath}
     Suppose $G=(V,E)$ is a directed graph, where $|V|=n$. $G$ contains a
@@ -172,7 +229,46 @@
     \end{question}
   \end{langdef}
 
-  \begin{langdef}{SYM\dash SET\dash STICKS}\label{def:sym-set-sticks}
+  \begin{langdef}{UHAMPATH}\label{def:uhampath}
+    \begin{instance}
+      an undirected graph $G$
+    \end{instance}
+    \begin{question}
+      Does $G$ contain a Hamiltonian path?
+    \end{question}
+  \end{langdef}
+
+  % TODO reference
+  \begin{theorem}\label{thm:hampath-npc}
+    \mbox{} % to put the next item on a new line
+    \begin{enumerate}
+      \renewcommand{\labelenumi}{\roman{enumi}.}
+    \item \lang{HAMPATH} is \NP-complete
+    \item \lang{UHAMPATH} is \NP-complete
+    \end{enumerate}
+  \end{theorem}
+
+  Now we define generalizations of the \lang{\sticks} and \lang{\asticks}
+  problems defined above, in which the three components of a tile are a finite
+  set of symbols instead of a single symbol. The \lang{\isticks} and
+  \lang{\aisticks} problems ask whether there is a layout of such tiles for
+  which any overlap of tiles implies that the intersection of the two
+  overlapping sets is not empty.
+
+  \begin{langdef}{\aisticks}\label{def:asym-i-sticks}
+    \begin{instance}
+      a finite set of symbols $\Sigma$, a finite set of sticks
+      $T\subseteq\powerset{\Sigma}^3$, and $k\in\mathbb{N}$
+    \end{instance}
+    \begin{question}
+      Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
+        all tiles $(X, Y, Z)\in T$, there exists a position
+        $n\in\{1,\ldots,k-2\}$ such that $c(n)\in X$, $c(n+1)\in Y$ and
+        $c(n+2)\in Z$?
+    \end{question}
+  \end{langdef}
+
+  \begin{langdef}{\isticks}\label{def:sym-i-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
       $T\subseteq\powerset{\Sigma}^3$, and $k\in\mathbb{N}$
@@ -185,42 +281,90 @@
     \end{question}
   \end{langdef}
 
-  \begin{langdef}{UHAMPATH}\label{def:uhampath}
-    \begin{instance}
-      an undirected graph $G$
-    \end{instance}
-    \begin{question}
-      Does $G$ contain a Hamiltonian path?
-    \end{question}
-  \end{langdef}
-
-  % TODO reference
-  \begin{lemma}\label{lem:hampath-npc}
-    \lang{HAMPATH} is \NP-complete.
-  \end{lemma}
+  \begin{theorem}\label{thm:asym-i-sticks-npc}
+    \lang{\aisticks} is \NP-complete.
+  \end{theorem}
   \begin{proof}
+    The reduction is from \lang{HAMPATH}. Define function $f$ as in
+    \autoref{alg:hampath-to-asym-i-sticks}.
+    \begin{algorithm}\label{alg:hampath-to-asym-i-sticks}
+      \caption{Reduction from \lang{HAMPATH} to \lang{\aisticks}}
+      \KwIn{$G=(V,E)$, where $|V|=n$}
+      $\Sigma\gets V\cup E$\;
+      $k\gets 2n+1$\;
+      Let $in(v)$ be the set of all incoming edges to $v$, $\forall v\in V$\;
+      Let $out(v)$ be the set of all outgoing edges to $v$, $\forall v\in V$\;
+      %% TODO this is not correct! must add if statements for empty in or outs.
+      $T\gets\{(in(v), v, out(v))|v\in V\}$\;
+      \Return{$\triple{\Sigma}{T}{k}$}
+    \end{algorithm}
+    $f$ can be computed in polynomial time.
+
+    Suppose $G=(V,E)\in\lang{HAMPATH}$, where $|V| = n$, so $\exists
+    p\colon\{1,2,\ldots,n\}\to V$, a bijection, such that $\forall
+    i\in\{1,2,\ldots,n-1\}$, $(p(i), p(i+1))\in E$. Then $f(G)$ outputs
+    $\triple{\Sigma}{T}{k}$ as described in
+    \autoref{alg:hampath-to-asym-i-sticks}. Then there is a layout of tiles
+    chosen as follows: the order of the internal (that is, not the first or the
+    last) tiles in the layout will be $(in(p(i)), p(i), out(p(i)))$, $\forall
+    i\in\{2,\ldots, n-1\}$, taken in increasing order. The first tile will be
+    $(e_{start}, p(1), (p(1),p(2)))$, where $e_{start}\in E\cup\{p(1)\}$. The
+    last tile will be $((p(n-1), p(n)), p(n), e_{end})$, where $e_{end}\in
+    E\cup\{p(n)\}$. Since $(p(i),p(i+1))\in(out(p(i)\cap in(p(i+1)))$ for all
+    $i\in\{1,2,\ldots,n-1\}$ by hypothesis, we can choose the following layout
+    for the tiles:
+    \begin{displaymath}
+      e_{start}, p(1), (p(1), p(2)), p(2), (p(2), p(3)), \ldots, p(n-1),
+      (p(n-1), p(n)), p(n), e_{end}
+    \end{displaymath}
+    The center of each tile will fall on a $p(i)$ for the appropriate $i$. The
+    length of this layout is $2n+1$. Therefore $f(G)\in\lang{\aisticks}$.
+
+    For the converse, suppose $f(G)\in\lang{\aisticks}$. If $f(G)$ outputs
+    $\triple{\Sigma}{T}{k}$, then there is a layout of tiles in $T$ such that
+    the length of the layout is at most $k=2n+1$. Since the middle component of
+    each tile is a unique vertex in the graph $G$, no two tiles can overlap in
+    two (or three) positions. Therefore the layout must have length at least
+    $3n-(n-1)=2n+1$. Since the length of the layout is at least $2n+1$ and at
+    most $2n+1$, it equals exactly $2n+1$. Therefore, each tile overlaps the
+    next one and the previous one in exactly one position on both the left and
+    the right, except for the first and the last tiles which overlap only on
+    the right and left, respectively. Thus the layout has the form
+    \begin{displaymath}
+      e_{start}, v_1, (v_1, v_2), v_2, (v_2, v_3), \ldots, v_{n-1}, (v_{n-1},
+      v_n), v_n, e_{end}
+    \end{displaymath}
+    We know the tiles must have a ``(set of edges, vertex, set of edges)''
+    format by the way we have designed $f$. Note that by hypothesis, $(v_i,
+    v_{i+1})\in out(v_i)\cap in(v_{i+1})$, for all
+    $i\in\{1,2,\ldots,n-1\}$. Since each odd symbol in this layout is an edge
+    in the graph $G$ (that is, excluding $e_{start}$ and $e_{end}$ which may
+    not be) which connects the vertices immediately before and after it,
+    reading each even symbol from left to right (that is, each of the vertices)
+    describes a Hamiltonian path in $G$. Therefore, $G\in\lang{HAMPATH}$.
+
+    Thus we have described a correct, polynomial time reduction from
+    \lang{HAMPATH} to \lang{\aisticks}. Since \lang{HAMPATH} is \NP-complete,
+    it follows that \lang{\aisticks} is also \NP-complete.
   \end{proof}
 
-  \begin{theorem}\label{thm:asym-set-sticks-npc}
-    \lang{ASYM\dash SET\dash STICKS} is \NP-complete.
+  The above proof in fact demonstrates that a more restrictive version of the
+  \lang{\aisticks} problem is \NP-complete: the version which requires the
+  middle component of each tile to be a single symbol chosen from the alphabet
+  $\Sigma$ instead of an element in the powerset of $\Sigma$.
+
+  \begin{theorem}\label{thm:sym-i-sticks-npc}
+    \lang{\isticks} is \NP-complete.
   \end{theorem}
   \begin{proof}
   \end{proof}
 
-  % TODO reference
-  \begin{lemma}\label{lem:uhampath-npc}
-    \lang{UHAMPATH} is \NP-complete.
-  \end{lemma}
-  \begin{proof}
-  \end{proof}
+  The \lang{\absticks} and \lang{\bsticks} problems defined below are a
+  generalization of the \lang{\asticks} and \lang{\sticks} problems,
+  respectively, in which one tile must be chosen from each of $N$ finite sets
+  (``bins'') of tiles, in addition to choosing a layout for the chosen tiles.
 
-  \begin{theorem}\label{thm:sym-set-sticks-npc}
-    \lang{SYM\dash SET\dash STICKS} is \NP-complete.
-  \end{theorem}
-  \begin{proof}
-  \end{proof}
-
-  \begin{langdef}{ASYM\dash BIN\dash STICKS}\label{def:asym-bin-sticks}
+  \begin{langdef}{\absticks}\label{def:asym-bin-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite collection of bins $B_1, B_2,
       \ldots, B_N \subseteq \Sigma^3$, and $k\in\mathbb{N}$
@@ -233,7 +377,7 @@
     \end{question}
   \end{langdef}
 
-  \begin{langdef}{SYM\dash BIN\dash STICKS}\label{def:sym-bin-sticks}
+  \begin{langdef}{\bsticks}\label{def:sym-bin-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite collection of bins $B_1, B_2,
       \ldots, B_N \subseteq \Sigma^3$, and $k\in\mathbb{N}$
@@ -247,15 +391,18 @@
     \end{question}
   \end{langdef}
 
+  The reduction from \lang{HAMPATH} to \lang{\absticks} is very similar to the
+  reduction from \lang{HAMPATH} to \lang{\absticks} in the proof of
+  \autoref{thm:asym-i-sticks-npc}.
+
   \begin{theorem}\label{thm:asym-bin-sticks-npc}
-    \lang{ASYM\dash BIN\dash STICKS} is \NP-complete.
+    \lang{\absticks} is \NP-complete.
   \end{theorem}
   \begin{proof}
-    The reduction is from \lang{HAMPATH}. Define transducer $f$ as in
+    The reduction is from \lang{HAMPATH}. Define function $f$ as in
     \autoref{alg:hampath-to-asym-bin-sticks}.
     \begin{algorithm}\label{alg:hampath-to-asym-bin-sticks}
-      \caption{Reduction from \lang{HAMPATH} to \lang{ASYM\dash BIN\dash
-      STICKS}}
+      \caption{Reduction from \lang{HAMPATH} to \lang{\absticks}}
       \KwIn{$G=(V,E)$, where $|V|=n$}
       $\Sigma\gets V\cup E$\;
       $k\gets 2n+1$\;
@@ -301,20 +448,21 @@
       e_{start}, p(1), (p(1), p(2)), p(2), (p(2), p(3)), \ldots, p(n-1),
       (p(n-1), p(n)), p(n), e_{end}
     \end{displaymath}
+    The length of this layout is $2n+1$. Therefore $f(G)\in\lang{\absticks}$.
 
-    For the converse, we suppose $f(G)\in\lang{ASYM\dash BIN\dash STICKS}$. If
-    $f(G)$ outputs $\triple{\Sigma}{\{B_v\}_{v\in V}}{k}$, then there is a
-    layout of one tile chosen from each $B_v$ such that the length of the
-    layout is at most $k=2n + 1$. Since exactly one tile is chosen from each
-    $B_v$, no tiles in any layout can overlap in two (or three) positions,
-    because the middle component of each tile is unique (specifically, the
-    middle component of each tile is a unique vertex in the graph
-    $G$). Therefore the layout must have length at least $3n-(n-1)=2n+1$. Since
-    the length of the layout is at least $2n+1$ and at most $2n+1$, it equals
-    exactly $2n+1$. Therefore each tile overlaps the next one and the previous
-    one in exactly one position on both the left and the right, except for the
-    first and the last tiles which overlap only on the right and the left,
-    respectively. Thus the layout has the form
+    For the converse, we suppose $f(G)\in\lang{\absticks}$. If $f(G)$ outputs
+    $\triple{\Sigma}{\{B_v\}_{v\in V}}{k}$, then there is a layout of one tile
+    chosen from each $B_v$ such that the length of the layout is at most $k=2n
+    + 1$. Since exactly one tile is chosen from each $B_v$, no tiles in any
+    layout can overlap in two (or three) positions, because the middle
+    component of each tile is unique (specifically, the middle component of
+    each tile is a unique vertex in the graph $G$). Therefore the layout must
+    have length at least $3n-(n-1)=2n+1$. Since the length of the layout is at
+    least $2n+1$ and at most $2n+1$, it equals exactly $2n+1$. Therefore each
+    tile overlaps the next one and the previous one in exactly one position on
+    both the left and the right, except for the first and the last tiles which
+    overlap only on the right and the left, respectively. Thus the layout has
+    the form
     \begin{displaymath}
       e_{start}, v_1, (v_1, v_2), v_2, (v_2, v_3), \ldots, v_{n-1}, (v_{n-1},
       v_n), v_n, e_{end}
@@ -322,18 +470,17 @@
     We know the tiles must have this ``(edge, vertex, edge)'' format by the way
     we have designed $f$. Since each odd symbol in this layout is an edge in
     the graph $G$ (that is, excluding $e_{start}$ and $e_{end}$ which may not
-    be), which connects the vertices immediately before and after it, reading
+    be) which connects the vertices immediately before and after it, reading
     each even symbol from left to right (that is, each of the vertices)
     describes a Hamiltonian path in $G$. Therefore, $G\in\lang{HAMPATH}$.
 
     Thus we have described a correct, polynomial time reduction from
-    \lang{HAMPATH} to \lang{ASYM\dash BIN\dash STICKS}. Since \lang{HAMPATH}
-    \NP-complete, it follows that \lang{ASYM\dash BIN\dash STICKS} is also
-    \NP-complete.
+    \lang{HAMPATH} to \lang{\absticks}. Since \lang{HAMPATH} is \NP-complete,
+    it follows that \lang{\absticks} is also \NP-complete.
   \end{proof}
 
   \begin{theorem}\label{thm:sym-bin-sticks-npc}
-    \lang{SYM\dash BIN\dash STICKS} is \NP-complete.
+    \lang{\bsticks} is \NP-complete.
   \end{theorem}
   \begin{proof}
   \end{proof}
