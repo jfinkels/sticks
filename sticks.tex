@@ -47,7 +47,8 @@
 
 \newcommand{\dash}{\mbox{-}}
 \newcommand{\defn}[1]{\emph{#1}}
-\newcommand{\mor}{$\leq_m^p$}
+\newcommand{\mor}{\leq_m^p}
+\newcommand{\moe}{\equiv_m^p}
 \newcommand{\plain}[1]{\,\text{#1}\,}
 \newcommand{\powerset}[1]{\mathcal{P}(#1)} % the power set operator
 \newcommand{\triple}[3]{\langle#1,#2,#3\rangle} % generalization of pairing fn.
@@ -114,8 +115,8 @@
     \end{question}
   \end{langdef}
 
-  \begin{proposition}
-    \lang{\amsticks}\mor\lang{\asticks}
+  \begin{proposition}\label{prp:amsticks-to-asticks}
+    $\lang{\amsticks}\mor\lang{\asticks}$
   \end{proposition}
   \begin{proof}
     Construct function $f$ defined by
@@ -141,6 +142,16 @@
 
     Thus we have described a correct, polynomial time reduction from
     \lang{\amsticks} to \lang{\asticks}.
+  \end{proof}
+
+  \begin{corollary}
+    $\lang{\asticks}\moe\lang{\amsticks}$
+  \end{corollary}
+  \begin{proof}
+    By \autoref{prp:amsticks-to-asticks},
+    $\lang{\amsticks}\mor\lang{\asticks}$, and
+    $\lang{\asticks}\mor\lang{\amsticks}$ by the identity function. Therefore
+    $\lang{\asticks}\moe\lang{\amsticks}$.
   \end{proof}
 
   Instead of considering a linear layout with two endpoints, we might consider
@@ -174,7 +185,7 @@
   \end{langdef}
 
   \begin{lemma}\label{lem:sticks-to-circ}
-    \lang{\asticks}\mor\lang{\acsticks}
+    $\lang{\asticks}\mor\lang{\acsticks}$
   \end{lemma}
   \begin{proof}
     Construct function $f$ defined by $\triple{\Sigma}{T}{k} \mapsto
@@ -202,7 +213,7 @@
   \end{proof}
 
   \begin{lemma}
-    \lang{\sticks}\mor\lang{\csticks}
+    $\lang{\sticks}\mor\lang{\csticks}$
   \end{lemma}
   \begin{proof}
     The proof of this lemma is the same as the proof of
@@ -294,8 +305,24 @@
       $k\gets 2n+1$\;
       Let $in(v)$ be the set of all incoming edges to $v$, $\forall v\in V$\;
       Let $out(v)$ be the set of all outgoing edges to $v$, $\forall v\in V$\;
-      %% TODO this is not correct! must add if statements for empty in or outs.
-      $T\gets\{(in(v), v, out(v))|v\in V\}$\;
+      $T\gets\emptyset$\;
+      \ForAll{$v\in V$}{
+        \If{$v$\,\textnormal{has at least one incoming edge and at least one
+            outgoing edge}}{
+          $T\gets T\cup\{(in(v), v, out(v))\}$\;
+        }
+        \If{$v$\,\textnormal{has at least one incoming edge and no outgoing
+            edges}}{
+          $T\gets T\cup\{(in(v), v, v)\}$\;
+        }
+        \If{$v$\,\textnormal{has no incoming edges and at least one outgoing
+            edge}}{
+          $T\gets T\cup\{(v, v, out(v))\}$\;
+        }
+        \If{$v$\,\textnormal{has no incoming edges and no outgoing edges}}{
+          $T\gets T\cup\{(v, v, v)\}$\;
+        }
+      }
       \Return{$\triple{\Sigma}{T}{k}$}
     \end{algorithm}
     $f$ can be computed in polynomial time.
