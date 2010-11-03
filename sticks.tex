@@ -1,10 +1,6 @@
 \documentclass{article}
 \usepackage{aliascnt} % for correct autoref labeling of non-theorems
-\usepackage[noend, % omit end of block tags
-  noline, % omit vertical block lines
-  linesnumbered, % number lines
-  boxed, % put a box around the algorithm
-]{algorithm2e} % for creating pseudocode
+\usepackage[noend, boxed, linesnumbered]{algorithm2e}
 \usepackage{amsfonts} % for \mathbb
 \usepackage{amsmath} % for \implies
 \usepackage{amsthm} % for theorems, definitions, lemmas, and styles
@@ -17,8 +13,8 @@
 
 % don't print semicolons in pseudocode algorithms
 \DontPrintSemicolon
-\SetKwIF{If}{ElseIf}{Else}{if}{}{else if}{else}{end if}%
-\SetKwFor{ForEach}{for each}{}{end foreach}%
+\SetKwIF{If}{ElseIf}{Else}{if}{}{else if}{else}{end if}
+\SetKwFor{ForAll}{for all}{}{end for all}
 
 % Define theorem, lemma, and definition environments and corresponding styles.
 % Lemmata, corollaries, and definitions are numbered with the same counter as
@@ -116,6 +112,28 @@
     \lang{ASYM\dash STICKS}\mor\lang{CIRCULAR\dash ASYM\dash STICKS}
   \end{lemma}
   \begin{proof}
+    Construct transducer $f$ defined by $\triple{\Sigma}{T}{k} \mapsto
+    \triple{\Sigma\cup\{x\}}{T\cup\{(x,x,x)\}}{k+3}$, where
+    $x\notin\Sigma$. $f$ can be computed in polynomial time.
+
+    Suppose $\triple{\Sigma}{T}{k}\in\lang{ASYM\dash STICKS}$. Then
+    $f(\triple{\Sigma}{T}{k})$ outputs
+    $\triple{\Sigma\cup\{x\}}{T\cup\{(x,x,x)\}}{k+3}$, as described
+    above. Since $(x,x,x)$ can not overlap with any tile in $T$, it must be
+    added without overlap to the layout for a penalty of $3$. Since the linear
+    layout of $T$ has length at most $k$, the circular layout of
+    $T\cup\{(x,x,x)\}$ has length at most $k+3$. Therefore
+    $f(\triple{\Sigma}{T}{k})\in\lang{CIRCULAR\dash ASYM\dash STICKS}$.
+
+    For the converse, suppose $\triple{\Sigma}{T}{k}\notin\lang{ASYM\dash
+      STICKS}$. Then the shortest layout must have length at least $k+1$. And
+    since $(x, x, x)$ cannot overlap with any tile in $T$, the layout of
+    $f(\triple{\Sigma}{T}{k})$ on the circle must have length at least
+    $(k+1)+3=k+4$, so $f(\triple{\Sigma}{T}{k})\notin\lang{CIRCULAR\dash
+      ASYM\dash STICKS}$.
+
+    Thus we have described a correct, polynomial time reduction from
+    $\lang{ASYM\dash STICKS}$ to $\lang{CIRCULAR\dash ASYM\dash STICKS}$.
   \end{proof}
 
   \begin{lemma}
@@ -124,7 +142,7 @@
   \begin{proof}
   \end{proof}
 
-  \section{\NP-complete variants}
+  \section{\texorpdfstring{\NP}{NP}-complete variants}
 
   \begin{langdef}{ASYM\dash SET\dash STICKS}\label{def:asym-set-sticks}
     \begin{instance}
@@ -234,34 +252,84 @@
   \end{theorem}
   \begin{proof}
     The reduction is from \lang{HAMPATH}. Define transducer $f$ as in
-    \autoref{fig:hampath-to-asym-bin-sticks}.
-    \begin{algorithm}\label{fig:hampath-to-asym-bin-sticks}
+    \autoref{alg:hampath-to-asym-bin-sticks}.
+    \begin{algorithm}\label{alg:hampath-to-asym-bin-sticks}
       \caption{Reduction from \lang{HAMPATH} to \lang{ASYM\dash BIN\dash
       STICKS}}
-      \KwIn{$G=(V,E)$, where $V=\{v_1,v_2,\ldots,v_n\}$}
+      \KwIn{$G=(V,E)$, where $|V|=n$}
       $\Sigma\gets V\cup E$\;
       $k\gets 2n+1$\;
-      $B_i\gets\emptyset$, for all $i\in\{1,\ldots,n\}$\;
-      \ForEach{$i\in\{1,\ldots,n\}$}{
-        \If{$v_i$ has at least one incoming edge and at least one outgoing
-          edge}{
-          $B_i\gets\{(e_{in},v_i,e_{out})|e_{in}, e_{out}\in E\plain{and}
-          e_{in}=(u,v_i)\plain{and} e_{out}=(v_i,w)\plain{for some}u,w\in
-          V\}$\;
+      $B_v\gets\emptyset$, for all $v\in V$\;
+      \ForAll{$v\in V$}{
+        \If{$v$\,\textnormal{has at least one incoming edge and at least one
+            outgoing edge}}{
+          \hangindent 33pt
+          $B_v\gets\{(e_{in},v,e_{out})|e_{in}, e_{out}\in E\plain{and}
+          e_{in}=(u,v)\plain{and} e_{out}=(v,w)\plain{for some}u,w\in V\}$\;
         }
-        \If{$v_i$ has at least one incoming edge and no outgoing edges}{
-          $B_i\gets\{(e_{in},v_i,v_i)|e_{in}\in E\plain{and}
-          e_{in}=(u,v_i)\plain{for some}u\in V\}$\;
+        \If{$v$\,\textnormal{has at least one incoming edge and no outgoing
+            edges}}{
+          $B_v\gets\{(e_{in},v,v)|e_{in}\in E\plain{and} e_{in}=(u,v)\plain{for
+            some}u\in V\}$\;
         }
-        \If{$v_i$ has no incoming edges and at least one outgoing edge}{
-          $B_i\gets\{(v_i,v_i,e_{out})|e_{out}\in E\plain{and}
-          e_{out}=(v_i, w)\plain{for some}w\in V\}$\;
+        \If{$v$\,\textnormal{has no incoming edges and at least one outgoing
+            edge}}{
+          $B_i\gets\{(v,v,e_{out})|e_{out}\in E\plain{and} e_{out}=(v,
+          w)\plain{for some}w\in V\}$\;
         }
-        \If{$v_i$ has no incoming edges and no outgoing edges}{
-          $B_i\gets\{(v_i,v_i,v_i)\}$\;
+        \If{$v$\,\textnormal{has no incoming edges and no outgoing edges}}{
+          $B_i\gets\{(v,v,v)\}$\;
         }
       }
+      \Return{$\triple{\Sigma}{\{B_v\}_{v\in V}}{k}$}
     \end{algorithm}
+    $f$ can be computed in polynomial time.
+    
+    Suppose $G=(V,E)\in\lang{HAMPATH}$, where $|V| = n$, so $\exists
+    p\colon\{1,2,\ldots,n\}\to V$, a bijection, such that $\forall
+    i\in\{1,2,\ldots,n-1\}$, $(p(i), p(i+1))\in E$. Then $f(G)$ outputs
+    $\triple{\Sigma}{\{B_v\}_{v\in V}}{k}$ as described in
+    \autoref{alg:hampath-to-asym-bin-sticks}. Then there is a layout of tiles
+    chosen as follows: $\forall i\in\{2,3,\ldots,n-1\}$, choose from $B_{p(i)}$
+    the tile $((p(i-1), p(i)), p(i), (p(i), p(i+1)))$. This tile exists in
+    $B_{p(i)}$ because $(p(i-1),p(i))$ and $(p(i),p(i+1))$ are edges in $E$ by
+    hypothesis. From $B_{p(1)}$ choose tile $(e_{start}, p(1), (p(1), p(2)))$,
+    where $e_{start}\in E\cup\{p(1)\}$. From $B_{p(n)}$ choose tile $((p(n-1),
+    p(n)), p(n), e_{end})$ where $e_{end}\in E\cup\{p(n)\}$. These two tiles
+    must exist in these sets by hypothesis as well. Now the layout will be
+    \begin{displaymath}
+      e_{start}, p(1), (p(1), p(2)), p(2), (p(2), p(3)), \ldots, p(n-1),
+      (p(n-1), p(n)), p(n), e_{end}
+    \end{displaymath}
+
+    For the converse, we suppose $f(G)\in\lang{ASYM\dash BIN\dash STICKS}$. If
+    $f(G)$ outputs $\triple{\Sigma}{\{B_v\}_{v\in V}}{k}$, then there is a
+    layout of one tile chosen from each $B_v$ such that the length of the
+    layout is at most $k=2n + 1$. Since exactly one tile is chosen from each
+    $B_v$, no tiles in any layout can overlap in two (or three) positions,
+    because the middle component of each tile is unique (specifically, the
+    middle component of each tile is a unique vertex in the graph
+    $G$). Therefore the layout must have length at least $3n-(n-1)=2n+1$. Since
+    the length of the layout is at least $2n+1$ and at most $2n+1$, it equals
+    exactly $2n+1$. Therefore each tile overlaps the next one and the previous
+    one in exactly one position on both the left and the right, except for the
+    first and the last tiles which overlap only on the right and the left,
+    respectively. Thus the layout has the form
+    \begin{displaymath}
+      e_{start}, v_1, (v_1, v_2), v_2, (v_2, v_3), \ldots, v_{n-1}, (v_{n-1},
+      v_n), v_n, e_{end}
+    \end{displaymath}
+    We know the tiles must have this ``(edge, vertex, edge)'' format by the way
+    we have designed $f$. Since each odd symbol in this layout is an edge in
+    the graph $G$ (that is, excluding $e_{start}$ and $e_{end}$ which may not
+    be), which connects the vertices immediately before and after it, reading
+    each even symbol from left to right (that is, each of the vertices)
+    describes a Hamiltonian path in $G$. Therefore, $G\in\lang{HAMPATH}$.
+
+    Thus we have described a correct, polynomial time reduction from
+    \lang{HAMPATH} to \lang{ASYM\dash BIN\dash STICKS}. Since \lang{HAMPATH}
+    \NP-complete, it follows that \lang{ASYM\dash BIN\dash STICKS} is also
+    \NP-complete.
   \end{proof}
 
   \begin{theorem}\label{thm:sym-bin-sticks-npc}
