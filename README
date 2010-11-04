@@ -1,6 +1,7 @@
 Besides pdflatex, compile-time dependencies include:
 
 * aliascnt.sty
+* algorithm2e.sty
 * cclicenses.sty
 * complexity.sty
 
