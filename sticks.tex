@@ -6,11 +6,9 @@
 \usepackage{amsthm} % for theorems, definitions, lemmas, and styles
 \usepackage{complexity}
 \usepackage{gensymb} % for \degree
-\usepackage[
-  backref=page, % backlinks in references
-  pdftitle={On the computational complexity of the sticks problem},
-  pdfauthor={Jeffrey Finkelstein}
-]{hyperref} % for pdf links when rendering \ref and \cite commands
+
+\usepackage[backref=page, pdftitle={On the computational complexity of the
+  sticks problem}, pdfauthor={Jeffrey Finkelstein}]{hyperref}
 
 % algorithm environment configuration
 \DontPrintSemicolon
@@ -44,6 +42,8 @@
 \newcommand{\lemmaname}{Lemma}
 \newcommand{\corollaryname}{Corollary}
 \newcommand{\definitionname}{Definition}
+\newcommand{\propositionname}{Proposition}
+\newcommand{\algocflinename}{Algorithm}
 
 \newcommand{\dash}{\mbox{-}}
 \newcommand{\defn}[1]{\emph{#1}}
@@ -69,7 +69,18 @@
 \newenvironment{instance}{\\Instance:}{}
 \newenvironment{question}{\\Question:}{}
 
+\author{Jeffrey Finkelstein}
+\date{\today}
+
 \begin{document}
+
+  \section{Definition}
+
+  We will consider variants of the ``sticks'' problem, a game in which one
+  attempts to determine the shortest one-dimensional layout of tiles, allowing
+  overlaps for tiles with matching symbols. We will consider first the version
+  in which each tile has three components---a left, a middle, and an end---with
+  a symbol chosen from some alphabet on each component.
 
   \begin{langdef}{\asticks}\label{def:asym-sticks}
     \begin{instance}
@@ -99,6 +110,10 @@
         $c(n+2)=z)$ or $(c(n)=z$, $c(n+1)=y$ and $c(n+2)=x)$?
     \end{question}
   \end{langdef}
+
+  Note that it is always possible to determine a layout of length $3t$ for an
+  instance of the sticks problem with $t$ tiles: simply lay them out in
+  sequence without any overlaps.
 
   \section{Variants of similar difficulty}
 
@@ -153,6 +168,9 @@
     $\lang{\asticks}\mor\lang{\amsticks}$ by the identity function. Therefore
     $\lang{\asticks}\moe\lang{\amsticks}$.
   \end{proof}
+
+  Therefore it is sufficient to consider only the version of this problem
+  without repeated tiles.
 
   Instead of considering a linear layout with two endpoints, we might consider
   the possibility of a layout along the circumference of a circle.
@@ -269,7 +287,8 @@
   \begin{langdef}{\aisticks}\label{def:asym-i-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
-      $T\subseteq\powerset{\Sigma}^3$, and $k\in\mathbb{N}$
+      $T\subseteq(\powerset{\Sigma}\backslash\emptyset)^3$, and
+      $k\in\mathbb{N}$
     \end{instance}
     \begin{question}
       Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
@@ -282,7 +301,8 @@
   \begin{langdef}{\isticks}\label{def:sym-i-sticks}
     \begin{instance}
       a finite set of symbols $\Sigma$, a finite set of sticks
-      $T\subseteq\powerset{\Sigma}^3$, and $k\in\mathbb{N}$
+      $T\subseteq(\powerset{\Sigma}\backslash\emptyset)^3$, and
+      $k\in\mathbb{N}$
     \end{instance}
     \begin{question}
       Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such that for
