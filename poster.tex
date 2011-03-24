@@ -1,0 +1,103 @@
+%%%%
+%% poster.tex
+%%
+%% Copyright 2011 Jeffrey Finkelstein
+%%
+%% Except where otherwise noted, this work is made available under the terms of
+%% the Creative Commons Attribution-ShareAlike 3.0 license,
+%% http://creativecommons.org/licenses/by-sa/3.0/.
+%%
+%% You are free:
+%%    * to Share — to copy, distribute and transmit the work
+%%    * to Remix — to adapt the work
+%% Under the following conditions:
+%%    * Attribution — You must attribute the work in the manner specified by
+%%    the author or licensor (but not in any way that suggests that they
+%%    endorse you or your use of the work).
+%%    * Share Alike — If you alter, transform, or build upon this work, you may
+%%    distribute the resulting work only under the same, similar or a 
+%%    compatible license.
+%%    * For any reuse or distribution, you must make clear to others the 
+%%    license terms of this work. The best way to do this is with a link to the
+%%    web page http://creativecommons.org/licenses/by-sa/3.0/.
+%%    * Any of the above conditions can be waived if you get permission from
+%%    the copyright holder.
+%%    * Nothing in this license impairs or restricts the author's moral rights.
+%%%%
+\documentclass[beamer]{beamer}
+\mode<presentation>{\usetheme{default}}
+
+% HACK to fix a bug in beamer
+% http://tex.stackexchange.com/questions/4436/beamer-undefined-control-sequence
+\providecommand\thispdfpagelabel[1]{}
+
+%\usepackage[english]{babel}
+\usepackage[orientation=landscape,size=a0]{beamerposter}
+
+%\usepackage{color}
+\usepackage{complexity}
+
+%\newcommand{\emphblue}[1]{\emph{\textcolor{blue}{#1}}}
+%\newcommand{\sigmastar}{\Sigma^*}
+%\newcommand{\kr}{\leq_{ker}^p}
+%\newcommand{\mor}{\leq_{m}^p}
+
+\title{Computational complexity of the sticks problem}
+\author{Jeffrey Finkelstein}
+\institute{Boston University}
+\date{\today}
+
+\begin{document}
+\begin{frame}{}
+  \begin{columns}[t]
+
+    %% left column
+    \begin{column}{.3\linewidth}
+      \begin{block}{\VeryHuge Motivation}
+        \begin{itemize}\veryHuge
+        \item foo
+        \item bar
+        \end{itemize}
+      \end{block}
+      %\vspace{2in}
+      \begin{block}{\VeryHuge Problem definition}
+        \begin{itemize}\veryHuge
+        \item foo
+        \item bar
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    %% middle column
+    \begin{column}{.3\linewidth}
+      \begin{block}{\VeryHuge Example instance}
+        %\includegraphics{images/rbc_gi.png}
+      \end{block}
+      %\vspace{0.2in}
+      \begin{block}{\VeryHuge Complexity}
+        \begin{itemize}\veryHuge
+        \item foo
+        \item bar
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    %% right column
+    \begin{column}{.3\linewidth}
+      \begin{block}{\VeryHuge $\NP$-complete variants}
+        \begin{itemize}\veryHuge
+        \item foo
+        \item bar
+        \end{itemize}
+      \end{block}
+      %\vspace{1.8in}
+      \begin{block}{\VeryHuge Further problems}
+        \begin{itemize}\veryHuge
+        \item foo
+        \item bar
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+\end{document}

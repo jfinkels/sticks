@@ -1,23 +1,53 @@
-Besides pdflatex, compile-time dependencies include:
+Dependencies
+============
+
+Besides pdflatex, compile-time dependencies for the paper include:
 
 * aliascnt.sty
 * algorithm2e.sty
 * cclicenses.sty
 * complexity.sty
 
-On Ubuntu, the necessary packages are:
+In addition, compile-time dependencies for the poster include:
+
+* beamer.cls
+* beamerposter.sty
+
+On Ubuntu, the necessary packages for the paper are:
 
 * texlive-latex-base
 * texlive-fonts-recommended
 * texlive-science
 
-To compile this article, run 
+In addition, the necessary packages for the poster are:
+
+* texlive-latex-extra
+* latex-beamer
+
+Compiling
+=========
+
+To compile the paper, run 
 
   compile-paper.sh
 
 The output is sticks.pdf.
 
+To compile the poster, run
+
+  compile-poster.sh
+
+The output is poster.pdf.
+
+Copyright information
+=====================
+
 Except where otherwise noted, both the LaTeX markup and the content of the
-article are made available under the terms of the Creative Commons
-Attribution-ShareAlike 3.0 license,
+paper are copyright 2010 Jeffrey Finkelstein, and are made available under the
+terms of the Creative Commons Attribution-ShareAlike 3.0 license,
 http://creativecommons.org/licenses/by-sa/3.0/.
+
+Contact information
+===================
+
+Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
