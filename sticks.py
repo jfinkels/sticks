@@ -37,19 +37,15 @@ def overlap(tile1, tile2):
     s). tile1 is considered to be the left tile, and tile2 is considered to be
     the right tile.
 
-    The behavior of this method is undefined if tile1 and tile2 do not have the
-    same length.
+    The lengths of tile1 and tile2 must be equal. The behavior of this method
+    is undefined if tile1 and tile2 do not have the same length.
 
     """
-    if tile1 == tile2:
-        return len(tile1)
     length = len(tile1)
-    result = length - 1
-    for i in range(1, length):
-        if tile1[i:] == tile2[:-i]:
-            break
-        result -= 1
-    return result
+    i = 0
+    while i < length and tile1[i:] != tile2[:length - i]:
+        i += 1
+    return length - i
 
 def score(layout):
     """Returns the overall score of the specified layout (a list of tiles).
