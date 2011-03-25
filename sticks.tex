@@ -38,9 +38,20 @@
   sticks problem}, pdfauthor={Jeffrey Finkelstein}]{hyperref}
 
 % algorithm environment configuration
-\DontPrintSemicolon
+%\DontPrintSemicolon
+\dontprintsemicolon
 \SetKwIF{If}{ElseIf}{Else}{if}{}{else if}{else}{end if}
 \SetKwFor{ForAll}{for all}{}{end for all}
+
+% allow for alternate statements of theorems
+\makeatletter
+\newtheorem*{rep@theorem}{\rep@title}
+\newcommand{\newreptheorem}[2]{%
+\newenvironment{rep#1}[1]{%
+ \def\rep@title{#2 \ref{##1}}%
+ \begin{rep@theorem}}%
+ {\end{rep@theorem}}}
+\makeatother
 
 % Define theorem, lemma, and definition environments and corresponding styles.
 % Lemmata, corollaries, and definitions are numbered with the same counter as
@@ -63,6 +74,8 @@
 \newaliascnt{definition}{theorem}
 \theoremstyle{definition} \newtheorem{definition}[definition]{Definition}
 \aliascntresetthe{definition}
+
+\theoremstyle{definition} \newreptheorem{definition}{Definition}
 
 % redefine footnote so it has no reference and no number
 \long\def\symbolfootnote#1{\begingroup%
@@ -87,7 +100,7 @@
 \newcommand{\defn}[1]{\emph{#1}}
 \newcommand{\mor}{\leq_m^p}
 \newcommand{\moe}{\equiv_m^p}
-\newcommand{\plain}[1]{\,\text{#1}\,}
+\newcommand{\plain}[1]{\;\text{#1}\;}
 \newcommand{\powerset}[1]{\mathcal{P}(#1)} % the power set operator
 \newcommand{\triple}[3]{\langle#1,#2,#3\rangle} % generalization of pairing fn.
 
@@ -278,6 +291,46 @@
     \autoref{lem:sticks-to-circ}, but we allow the possibility of rotating the
     tiles by 180\degree when choosing a layout.
   \end{proof}
+
+  \section{Integer linear programming characterization}
+
+  We can characterize these sticks problems as integer linear programming
+  problems.
+
+  \begin{repdefinition}{def:asym-sticks}[Linear programming characterization]
+    Let $C$ be a finite set of symbols, let $k\in\mathbb{N}$ be the maximum
+    length of the layout, let $n\in\mathbb{N}$ be the number of tiles, and let
+    $s_{i,j}\in C$ be the symbol on tile $i$ at position $j$, where $1\leq
+    i\leq n$ and $0\leq j\leq 2$. (We will assume for simplicity that $C$ is
+    just the set $\{1, 2,\ldots, |C|\}$.)
+
+    Let variable $x_{i,j}\in\{0, 1\}$, where $1\leq i\leq k$ and $1\leq j\leq
+    |C|$ be defined by $x_{i, j} = 1$ if and only if symbol $j$ is at position
+    $i$. Let variable $y_{i,j}\in\{0, 1\}$, where $1\leq i\leq k-2$ and $1\leq
+    j\leq n$, be defined by $y_{i, j} = 1$ if and only if tile $j$ starts at
+    position $i$.
+    
+    Let the constraints be as follows.
+    \begin{itemize}
+    \item[] Every tile must start at exactly one position:
+      \begin{displaymath}
+        \sum_{i = 1}^{k - 2}{y_{i, j}} = 1, \plain{for} 1\leq j\leq n
+      \end{displaymath}
+    \item[] Each position must have at most one color:
+      \begin{displaymath}
+        \sum_{i = 1}^{|C|}{x_{j, i}} = 1, \plain{for} 1\leq j\leq k
+      \end{displaymath}
+    \item[] The colors of the layout must correspond to the colors of the
+      tiles:
+      \begin{displaymath}
+        y_{i, j} \leq x_{i + k, s_{j, k}}, \plain{for} 1\leq i\leq k - 2,\;
+        1\leq j\leq n,\; 0\leq k\leq 2
+      \end{displaymath}
+    \end{itemize}
+    
+    The \lang{\asticks} problem is the problem of determining feasibility of
+    the above linear programming instance.
+  \end{repdefinition}
 
   \section{\texorpdfstring{\NP}{NP}-complete variants}
 
