@@ -1,6 +1,7 @@
 import string
 import unittest
 
+from sticks import best
 from sticks import generate_instance
 from sticks import instance_to_letters
 from sticks import tile_to_letters
@@ -10,6 +11,13 @@ from sticks import brute_force
 
 class TestSticksFunctions(unittest.TestCase):
     """Test class for functions in the sticks module."""
+
+    def test_best(self):
+        """Test method for the best method."""
+        layout1 = [(1, 2, 3), (2, 3, 4), (3, 4, 5)]
+        layout2 = [(1, 2, 3), (3, 4, 5), (4, 5, 6)]
+        layout3 = [(1, 2, 3), (4, 5, 6), (6, 7, 8)]
+        self.assertIs(best((layout1, layout2, layout3)), layout1)
 
     def test_generate_instance(self):
         """Test method for the generate_instance method."""
