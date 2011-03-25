@@ -65,6 +65,21 @@ def best(layouts):
     """
     return min(layouts, key=score)
 
+def greedy(instance):
+    """Performs a greedy search for the best solution of instances with tiles
+    of size two.
+
+    """
+    # TODO hold double tiles until the end!!!
+    result = []
+    while len(instance) > 0:
+        tile = instance.pop()
+        i = 0
+        while i < len(result) and overlap(tile, result[i]) > 1:
+            i += 1
+        result.insert(i, tile)
+    return result
+
 def brute_force(instance):
     """Performs a brute force search to find the layout with the minimum
     possible layout of the tiles specified in the instance.

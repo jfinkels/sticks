@@ -3,11 +3,19 @@ import unittest
 
 from sticks import best
 from sticks import generate_instance
+from sticks import greedy
 from sticks import instance_to_letters
 from sticks import tile_to_letters
 from sticks import overlap
 from sticks import score
 from sticks import brute_force
+
+# the number of instances to generate when running multiple tests
+NUM_INSTANCES = 10
+
+COLORS = 6
+TILES = 5
+LENGTH = 2
 
 class TestSticksFunctions(unittest.TestCase):
     """Test class for functions in the sticks module."""
@@ -24,6 +32,14 @@ class TestSticksFunctions(unittest.TestCase):
         instance = generate_instance(3, 6, 2)
         expected = [(0, 0), (0, 1), (0, 2), (1, 1), (1, 2), (2, 2)]
         self.assertItemsEqual(instance, expected)
+
+    def test_greedy(self):
+        """Test method for the greedy method."""
+        for n in range(NUM_INSTANCES):
+            instance = generate_instance(COLORS, TILES, LENGTH)
+            brute_force_score = score(brute_force(instance))
+            greedy_score = score(greedy(instance))
+            self.assertEqual(greedy_score, brute_force_score)
 
     def test_tile_to_letters(self):
         """Test method for the tile_to_letters method."""
