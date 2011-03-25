@@ -3,6 +3,8 @@
 *#
 *~
 
+*.pyc
+
 *.aux
 *.log
 *.bbl
