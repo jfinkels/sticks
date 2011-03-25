@@ -79,9 +79,7 @@ def brute_force(instance):
     return best(permutations(instance))
 
 if __name__ == '__main__':
-    num_colors = 10
-    num_sticks = 5
-    stick_length = 2
-    instance = to_letters(generate_instance(num_colors, num_sticks,
-                                            stick_length))
-    print instance
+    instance = generate_instance(6, 8, 2)
+    b = brute_force(instance)
+    print 'original instance:', instance
+    print 'best layout (score', score(b), '):', instance_to_letters(b)
