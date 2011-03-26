@@ -24,80 +24,95 @@
 %%    the copyright holder.
 %%    * Nothing in this license impairs or restricts the author's moral rights.
 %%%%
-\documentclass[beamer]{beamer}
-\mode<presentation>{\usetheme{default}}
-
-% HACK to fix a bug in beamer
-% http://tex.stackexchange.com/questions/4436/beamer-undefined-control-sequence
-\providecommand\thispdfpagelabel[1]{}
-
-%\usepackage[english]{babel}
-\usepackage[orientation=landscape,size=a0]{beamerposter}
-
-%\usepackage{color}
+\documentclass{lposter}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{alltt}
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage{amssymb, amsthm, bm}
+%\usepackage{semantic}
 \usepackage{complexity}
 
-%\newcommand{\emphblue}[1]{\emph{\textcolor{blue}{#1}}}
-%\newcommand{\sigmastar}{\Sigma^*}
-%\newcommand{\kr}{\leq_{ker}^p}
-%\newcommand{\mor}{\leq_{m}^p}
+\bibliographystyle{alpha}
 
 \title{Computational complexity of the sticks problem}
 \author{Jeffrey Finkelstein}
-\institute{Boston University}
-\date{\today}
+\advisor{Steve Homer}
+\department{Computer Science}
+%\institute{Boston University}
+\year{2011}
+
+\pagestyle{fancy}
 
 \begin{document}
-\begin{frame}{}
-  \begin{columns}[t]
+\begin{poster}
 
-    %% left column
-    \begin{column}{.3\linewidth}
-      \begin{block}{\VeryHuge Motivation}
-        \begin{itemize}\veryHuge
-        \item foo
-        \item bar
-        \end{itemize}
-      \end{block}
-      %\vspace{2in}
-      \begin{block}{\VeryHuge Problem definition}
-        \begin{itemize}\veryHuge
-        \item foo
-        \item bar
-        \end{itemize}
-      \end{block}
-    \end{column}
+\section{Section}
 
-    %% middle column
-    \begin{column}{.3\linewidth}
-      \begin{block}{\VeryHuge Example instance}
-        %\includegraphics{images/rbc_gi.png}
-      \end{block}
-      %\vspace{0.2in}
-      \begin{block}{\VeryHuge Complexity}
-        \begin{itemize}\veryHuge
-        \item foo
-        \item bar
-        \end{itemize}
-      \end{block}
-    \end{column}
+Text text text text text text text text text text text text text
+text text text text text text text text text text text text text
+text text text text text text text text text text text text text
+text text text text text text text text text text text text text
+text text text text text text text text text text text text text.
 
-    %% right column
-    \begin{column}{.3\linewidth}
-      \begin{block}{\VeryHuge $\NP$-complete variants}
-        \begin{itemize}\veryHuge
-        \item foo
-        \item bar
-        \end{itemize}
-      \end{block}
-      %\vspace{1.8in}
-      \begin{block}{\VeryHuge Further problems}
-        \begin{itemize}\veryHuge
-        \item foo
-        \item bar
-        \end{itemize}
-      \end{block}
-    \end{column}
-  \end{columns}
-\end{frame}
+\bibliography{sample}
+
+\end{poster}
+
+%% \begin{frame}{}
+%%   \begin{columns}[t]
+
+%%     %% left column
+%%     \begin{column}{.3\linewidth}
+%%       \begin{block}{\VeryHuge Motivation}
+%%         \begin{itemize}\veryHuge
+%%         \item foo
+%%         \item bar
+%%         \end{itemize}
+%%       \end{block}
+%%       %\vspace{2in}
+%%       \begin{block}{\VeryHuge Problem definition}
+%%         \begin{itemize}\veryHuge
+%%         \item foo
+%%         \item bar
+%%         \end{itemize}
+%%       \end{block}
+%%     \end{column}
+
+%%     %% middle column
+%%     \begin{column}{.3\linewidth}
+%%       \begin{block}{\VeryHuge Example instance}
+%%         %\includegraphics{images/rbc_gi.png}
+%%       \end{block}
+%%       %\vspace{0.2in}
+%%       \begin{block}{\VeryHuge Complexity}
+%%         \begin{itemize}\veryHuge
+%%         \item foo
+%%         \item bar
+%%         \end{itemize}
+%%       \end{block}
+%%     \end{column}
+
+%%     %% right column
+%%     \begin{column}{.3\linewidth}
+%%       \begin{block}{\VeryHuge $\NP$-complete variants}
+%%         \begin{itemize}\veryHuge
+%%         \item foo
+%%         \item bar
+%%         \end{itemize}
+%%       \end{block}
+%%       %\vspace{1.8in}
+%%       \begin{block}{\VeryHuge Further problems}
+%%         \begin{itemize}\veryHuge
+%%         \item foo
+%%         \item bar
+%%         \end{itemize}
+%%       \end{block}
+%%     \end{column}
+%%   \end{columns}
+%% \end{frame}
 \end{document}
