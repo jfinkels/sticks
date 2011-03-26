@@ -25,39 +25,56 @@
 %%    * Nothing in this license impairs or restricts the author's moral rights.
 %%%%
 \documentclass{lposter}
-\usepackage{graphicx}
-\usepackage{natbib}
-\usepackage{booktabs}
-\usepackage{subfig}
-\usepackage{amsmath}
-\usepackage{alltt}
-\usepackage{textcomp}
-\usepackage{url}
-\usepackage{amssymb, amsthm, bm}
-%\usepackage{semantic}
+
+\usepackage{amsthm}
 \usepackage{complexity}
 
-\bibliographystyle{alpha}
-
-\title{Computational complexity of the sticks problem}
+\title{Computational complexity of the linear matching systems problem}
 \author{Jeffrey Finkelstein}
 \advisor{Steve Homer}
 \department{Computer Science}
 %\institute{Boston University}
+\date{\today}
 \year{2011}
 
-\pagestyle{fancy}
+\newenvironment{instance}{\\Instance:}{}
+\newenvironment{question}{\\Question:}{}
+
+\theoremstyle{definition} \newtheorem*{definition}{Definition}
 
 \begin{document}
 \begin{poster}
 
-\section{Section}
+\section{Motivation}
 
-Text text text text text text text text text text text text text
-text text text text text text text text text text text text text
-text text text text text text text text text text text text text
-text text text text text text text text text text text text text
-text text text text text text text text text text text text text.
+How does the human mind create and understand sentences in natural language?
+
+How long would it take for a computer to use the same strategies?
+
+\section{Problem definition}
+
+Consider a linear tile with three cells. Each cell contains one color. Two
+tiles can overlap wherever the cells have the same color. Given a set of tiles,
+we wish to compute the linear layout of (possibly overlapping) tiles with the
+shortest total length. Formally,
+
+
+\begin{definition}
+  Instance: a finite set of symbols $\Sigma$, a finite set of sticks
+  $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
+
+  Question: Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such
+  that for all tiles $(x, y, z)\in T$, there exists a position
+  $n\in\{1,\ldots,k-2\}$ such that $c(n)=x$, $c(n+1)=y$ and $c(n+2)=z$?
+\end{definition}
+
+\section{Example instance}
+
+\section{Complexity}
+
+\section{NP-complete variants}
+
+\section{Further work}
 
 \bibliography{sample}
 
