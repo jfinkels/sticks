@@ -69,15 +69,44 @@ def greedy(instance):
     """Performs a greedy search for the best solution of instances with tiles
     of size two.
 
+    The instance must contain at least one tile.
+
     """
-    # TODO hold double tiles until the end!!!
+
+    # initialize the list of groups; the first one just has the first tile
+    groups = [[instance[0]]]
+    for tile in instance[1:]:
+        added = False
+        for group in groups:
+            # first, check if the tile fits at the beginning or end
+            if overlap(tile, group[0]) == 1:
+                group.insert(0, tile)
+                added = True
+                break
+            if overlap(group[-1], tile) == 1:
+                group.insert(len(group), tile)
+                added = True
+                break
+            # next, check if the tile fits in the middle somewhere
+            for i in range(1, len(group)):
+                if overlap(group[i], tile) == 1 \
+                        and overlap(tile, group[i]) == 1:
+                    group.insert(i, tile)
+                    added = True
+                    break
+            # if the tile was added in the middle of this group, we don't need
+            # to continue looking
+            if added:
+                break
+        # if the tile was not added to a group, create a new one
+        if not added:
+            groups.append([tile])
+        print tile, ' - ', groups
+    # put all the tiles in each group together into one list
     result = []
-    while len(instance) > 0:
-        tile = instance.pop()
-        i = 0
-        while i < len(result) and overlap(tile, result[i]) > 1:
-            i += 1
-        result.insert(i, tile)
+    for group in groups:
+        for tile in group:
+            result.append(tile)
     return result
 
 def brute_force(instance):

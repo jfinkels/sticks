@@ -37,8 +37,17 @@ class TestSticksFunctions(unittest.TestCase):
         """Test method for the greedy method."""
         for n in range(NUM_INSTANCES):
             instance = generate_instance(COLORS, TILES, LENGTH)
-            brute_force_score = score(brute_force(instance))
-            greedy_score = score(greedy(instance))
+
+            print 'brute force'
+            brute_force_solution = brute_force(instance)
+            brute_force_score = score(brute_force_solution)
+            print 'bf', brute_force_score, ':', brute_force_solution
+
+            print 'greedy'
+            greedy_solution = greedy(instance)
+            greedy_score = score(greedy_solution)
+            print 'gr', greedy_score, ':', greedy_solution
+
             self.assertEqual(greedy_score, brute_force_score)
 
     def test_tile_to_letters(self):
@@ -69,6 +78,7 @@ class TestSticksFunctions(unittest.TestCase):
         self.assertEqual(overlap(tile1, tile2), 1)
         tile2 = (4, 5, 6)
         self.assertEqual(overlap(tile1, tile2), 0)
+        self.assertEqual(0, overlap((1, 3), (0, 2)))
 
     def test_score(self):
         """Test method for the score method."""
