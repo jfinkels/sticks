@@ -35,7 +35,7 @@
 
 \colorlet{shadecolor}{blue!20!gray!20}
 
-\title{Computational complexity of the linear matching system problem}
+\title{Computational complexity of the linear matching templates problem}
 \author{Jeffrey Finkelstein}
 \advisor{Steve Homer}
 \department{Computer Science}
@@ -43,15 +43,15 @@
 \date{\today}
 \year{2011}
 
-\newenvironment{instance}{\\Instance:}{}
-\newenvironment{question}{\\Question:}{}
-
 \theoremstyle{definition} \newtheorem*{definition}{Definition}
 
 \begin{document}
 \begin{poster}
 
 \section{Motivation}
+
+One of the goals of the study of syntax in natural languages is to understand
+how the human mind understands sentences. 
 
 How does the human mind create and understand sentences in natural language?
 
@@ -77,15 +77,15 @@ shortest total length. Formally,
 
 \section{Complexity}
 
-The linear matching system problem is in \NP. So far we can neither prove that
-it is \NP-complete nor that it is in \P.
+The linear matching templates problem is in \NP. So far we can neither prove
+that it is \NP-complete nor that it is in \P.
 
 \columnbreak
 
 \section{Example instance}
 
 \begin{figure}
-  \caption{An example instance of the linear matching system problem.}
+  \caption{An example instance of the linear matching templates problem.}
   \includegraphics{example-instance}
 \end{figure}
 
@@ -101,11 +101,11 @@ it is \NP-complete nor that it is in \P.
 
 \section{NP-complete variants}
 
-The following variants of the linear matching system problem are
+The following variants of the linear matching templates problem are
 \NP-complete.
 
-{\bf Linear matching system with intersecting sets}. If we allow each tile to
-have a set of colors and allow tiles to overlap if the intersection of the
+{\bf Linear matching templates with intersecting sets}. If we allow each tile
+to have a set of colors and allow tiles to overlap if the intersection of the
 overlapping sets is non-empty, then the problem is \NP-complete.
 
 \begin{proof}[Proof sketch]
@@ -117,7 +117,7 @@ overlapping sets is non-empty, then the problem is \NP-complete.
   Hamiltonian path in $G$.
 \end{proof}
 
-{\bf Linear matching system chosen from bins}. If we are given a set of bins
+{\bf Linear matching templates chosen from bins}. If we are given a set of bins
 containing tiles and require that one must be chosen from each bin, then the
 problem is \NP-complete.
 
@@ -168,19 +168,18 @@ programming solvers to decide these problems.
     for $1\leq i\leq k - 2$, $1\leq j\leq n$, $0\leq m\leq 2$.
   \end{itemize}
     
-  The linear matching system problem is the problem of determining feasibility
-  of the above linear programming instance.
+  The linear matching templates problem is the problem of determining
+  feasibility of the above linear programming instance.
 \end{definition}
 \end{shaded}
 
 \section{Further work}
 
 \begin{itemize}
-\item
-Determine if the linear matching system problem is \NP-complete.
-\item
-Determine the complexity of the following variants of the linear matching
-system.
+\item Determine if the linear matching templates problem is \NP-complete.
+\item Determine the complexity of the following variants of the linear matching
+  templates problem.
+\item Consider the effect of probabilistically introduced wildcard tiles.
 \end{itemize}
 %\bibliography{sample}
 
