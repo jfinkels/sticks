@@ -8,36 +8,26 @@ Besides pdflatex, compile-time dependencies for the paper include:
 * cclicenses.sty
 * complexity.sty
 
-In addition, compile-time dependencies for the poster include:
-
-* beamer.cls
-* beamerposter.sty
-
 On Ubuntu, the necessary packages for the paper are:
 
 * texlive-latex-base
 * texlive-fonts-recommended
 * texlive-science
 
-In addition, the necessary packages for the poster are:
-
-* texlive-latex-extra
-* latex-beamer
-
 Compiling
 =========
 
 To compile the paper, run 
 
-  compile-paper.sh
+  ./compile-paper.sh
 
-The output is sticks.pdf.
+The output is "sticks.pdf".
 
 To compile the poster, run
 
-  compile-poster.sh
+  ./compile-poster.sh
 
-The output is poster.pdf.
+The output is "poster/poster.pdf".
 
 Copyright information
 =====================
