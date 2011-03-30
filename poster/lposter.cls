@@ -23,8 +23,8 @@
 \setlength{\topmargin}{0.5in}
 \setlength{\oddsidemargin}{0.5in}
 \setlength{\evensidemargin}{\oddsidemargin}
-\setlength{\topmargin}{0.5in}
-\setlength{\headheight}{4in} % 4 before
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{4.5in} % 4 before
 \setlength{\headsep}{0.5in}
 \setlength{\footskip}{1in}
 \setlength{\voffset}{0pt}
@@ -118,6 +118,7 @@
 
 \fancyhead[C]{%
 %{\color{black}\Large\textsf{\@class}\\}%
+{\begin{flushleft}{\@logo\\}\end{flushleft}}
 {\color{black}\fontsize{80pt}{100pt}\selectfont\textsf{\textbf{\@title}}\\[0.25em]}
 {\color{black}\LARGE\textsf{\@author}\\[0.25em]}
 }
