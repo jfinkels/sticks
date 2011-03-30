@@ -1,0 +1,41 @@
+The following variants of the LMT problem are \NP-complete.
+
+{\bf LMT with intersecting sets}. If we allow each tile
+to have a set of colors and allow tiles to overlap if the intersection of the
+overlapping sets is non-empty, then the problem is \NP-complete.
+
+\colorlet{shadecolor}{red!40!gray!20}
+\begin{shaded}
+\begin{proof}[Proof sketch]
+  The reduction is from $\lang{HAMPATH}$. Transform each vertex of the graph
+  into a tile, where the middle cell is the vertex, the left cell is the set of
+  all incoming edges, and the right cell is the set of all outgoing edges. Then
+  there is a layout of length $3|V| - (|V| - 1) = 2|V| + 1$ if and only if
+  there is a Hamiltonian path in $G$.
+\end{proof}
+\end{shaded}
+
+The original LMT problem is (basically) the restriction of this variant to sets
+of tiles containing only singleton sets.
+
+{\bf LMT chosen from bins}. If we are given a set of bins
+containing tiles and require that one must be chosen from each bin, then the
+problem is \NP-complete.
+
+\begin{shaded}
+\begin{proof}[Proof sketch]
+  The reduction is again from $\lang{HAMPATH}$. For each vertex, create one bin
+  and place in it one tile for each pair of incoming and outgoing edge, so that
+  the left cell of the tile is one incoming edge, the middle cell is the
+  vertex, and the right cell is one outgoing edge. Then there is a layout of
+  length $2|V| + 1$ with one cell chosen from each bin if and only if there is
+  a Hamiltonian path in $G$.
+\end{proof}
+\end{shaded}
+
+The original LMT problem is (basically) the restriction of this variant to sets
+of bins containing exactly one tile.
+
+That the original problem is a restriction of these \NP-complete variants may
+suggest that it is computationally \emph{easier}, though we can not currently
+prove this.

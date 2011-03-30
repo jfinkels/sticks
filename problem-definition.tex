@@ -1,0 +1,17 @@
+Consider a linear tile with three cells. Each cell contains one color. Two
+tiles can overlap wherever the cells have the same color. Given a set of tiles,
+we wish to compute the linear layout of (possibly overlapping) tiles with the
+shortest total length. Formally, the linear matching templates (LMT) problem
+can be defined as follows:
+
+\begin{shaded}
+\begin{definition}\mbox{}
+
+  Instance: a finite set of symbols $\Sigma$, a finite set of sticks
+  $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
+
+  Question: Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such
+  that for all tiles $(x, y, z)\in T$, there exists a position
+  $n\in\{1,\ldots,k-2\}$ such that $c(n)=x$, $c(n+1)=y$ and $c(n+2)=z$?
+\end{definition}
+\end{shaded}

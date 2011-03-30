@@ -32,10 +32,11 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{framed}
+\usepackage{type1cm}
 
-\colorlet{shadecolor}{blue!20!gray!20}
+\colorlet{shadecolor}{blue!40!gray!20}
 
-\title{Computational complexity of the linear matching templates problem}
+\title{Computational complexity of the linear matching templates (LMT) problem}
 \author{Jeffrey Finkelstein}
 \advisor{Steve Homer}
 \department{Computer Science}
@@ -48,140 +49,28 @@
 \begin{document}
 \begin{poster}
 
+%% first column
 \section{Motivation}
-
-One of the goals of the study of syntax in natural languages is to understand
-how the human mind understands sentences. 
-
-How does the human mind create and understand sentences in natural language?
-
-How long would it take for a computer to use the same strategies?
+\input{motivation}
 
 \section{Problem definition}
+\input{problem-definition}
 
-Consider a linear tile with three cells. Each cell contains one color. Two
-tiles can overlap wherever the cells have the same color. Given a set of tiles,
-we wish to compute the linear layout of (possibly overlapping) tiles with the
-shortest total length. Formally,
+%% second column
+\section{Linear programming characterization}
+\input{lp-characterization}
 
-\begin{shaded}
-\begin{definition}\mbox{}\\
-  Instance: a finite set of symbols $\Sigma$, a finite set of sticks
-  $T\subseteq\Sigma^3$, and $k\in\mathbb{N}$
-
-  Question: Does there exist a layout $c\colon\{1,\ldots,k\}\to\Sigma$ such
-  that for all tiles $(x, y, z)\in T$, there exists a position
-  $n\in\{1,\ldots,k-2\}$ such that $c(n)=x$, $c(n+1)=y$ and $c(n+2)=z$?
-\end{definition}
-\end{shaded}
-
-\section{Complexity}
-
-The linear matching templates problem is in \NP. So far we can neither prove
-that it is \NP-complete nor that it is in \P.
-
-\columnbreak
+\section{\NP-complete variants}
+\input{complete-variants}
 
 \section{Example instance}
+\input{example-instance}
 
-\begin{figure}
-  \caption{An example instance of the linear matching templates problem.}
-  \includegraphics{example-instance}
-\end{figure}
-
-\begin{figure}
-  \caption{A non-minimal layout of length 7.}
-  \includegraphics{non-minimal}
-\end{figure}
-
-\begin{figure}
-  \caption{A minimal layout of length 6.}
-  \includegraphics{minimal}
-\end{figure}
-
-\section{NP-complete variants}
-
-The following variants of the linear matching templates problem are
-\NP-complete.
-
-{\bf Linear matching templates with intersecting sets}. If we allow each tile
-to have a set of colors and allow tiles to overlap if the intersection of the
-overlapping sets is non-empty, then the problem is \NP-complete.
-
-\begin{proof}[Proof sketch]
-  The reduction is from $\lang{HAMPATH} = \{G=(V, E)|G$ is a graph with a
-  Hamiltonian path$\}$. Transform each vertex of the graph into a tile, where
-  the middle cell is the vertex, the left cell is the set of all incoming
-  edges, and the right cell is the set of all outgoing edges. Then there is a
-  layout of length $3|V| - (|V| - 1) = 2|V| + 1$ if and only if there is a
-  Hamiltonian path in $G$.
-\end{proof}
-
-{\bf Linear matching templates chosen from bins}. If we are given a set of bins
-containing tiles and require that one must be chosen from each bin, then the
-problem is \NP-complete.
-
-\begin{proof}[Proof sketch]
-  The reduction is again from $\lang{HAMPATH}$. For each vertex, create one bin
-  and place in it one tile for each pair of incoming and outgoing edge, so that
-  the left cell of the tile is one incoming edge, the middle cell is the
-  vertex, and the right cell is one outgoing edge. Then there is a layout of
-  length $2|V| + 1$ with one cell chosen from each bin if and only if there is
-  a Hamiltonian path in $G$.
-\end{proof}
-
-\section{Linear programming characterization}
-
-We can characterize these problems as integer linear programming problems so
-that we may use the techniques and optimizations of general integer linear
-programming solvers to decide these problems.
-
-\begin{shaded}
-\begin{definition}[Linear programming characterization]
-  Let $C$ be a finite set of colors, let $k\in\mathbb{N}$ be the maximum
-  length of the layout, let $n\in\mathbb{N}$ be the number of tiles, and let
-  $s_{i,j}\in C$ be the symbol on tile $i$ at position $j$, where $1\leq i\leq
-  n$ and $0\leq j\leq 2$. (We will assume for simplicity that $C$ is just the
-  set $\{1, 2,\ldots, |C|\}$.)
-
-  Let variable $x_{i,j}\in\{0, 1\}$, where $1\leq i\leq k$ and $1\leq j\leq
-  |C|$, be defined by $x_{i, j} = 1$ if and only if symbol $j$ is at position
-  $i$. Let variable $y_{i,j}\in\{0, 1\}$, where $1\leq i\leq k-2$ and $1\leq
-  j\leq n$, be defined by $y_{i, j} = 1$ if and only if tile $j$ starts at
-  position $i$.
-    
-  Let the constraints be as follows.
-  \begin{itemize}
-  \item[$\cdot$] Every tile must start at exactly one position:
-    \begin{displaymath}
-      \sum_{i = 1}^{k - 2}{y_{i, j}} = 1,\,\textnormal{for}\, 1\leq j\leq n
-    \end{displaymath}
-  \item[$\cdot$] Each position in the layout must have at most one symbol:
-    \begin{displaymath}
-      \sum_{j = 1}^{|C|}{x_{i, j}} = 1,\,\textnormal{for}\, 1\leq i\leq k
-    \end{displaymath}
-  \item[$\cdot$] The symbols of the layout must correspond to the symbols of
-    the tiles:
-    \begin{displaymath}
-      y_{i, j} \leq x_{i + m, s_{j, m}}
-    \end{displaymath}
-    for $1\leq i\leq k - 2$, $1\leq j\leq n$, $0\leq m\leq 2$.
-  \end{itemize}
-    
-  The linear matching templates problem is the problem of determining
-  feasibility of the above linear programming instance.
-\end{definition}
-\end{shaded}
+\section{Complexity}
+\input{lmt-complexity}
 
 \section{Further work}
-
-\begin{itemize}
-\item Determine if the linear matching templates problem is \NP-complete.
-\item Determine the complexity of the following variants of the linear matching
-  templates problem.
-\item Consider the effect of probabilistically introduced wildcard tiles.
-\end{itemize}
-%\bibliography{sample}
+\input{further-work}
 
 \end{poster}
 \end{document}
