@@ -7,12 +7,12 @@ programming solvers to decide these problems.
 \begin{definition}[Linear programming characterization]
   Let $C$ be a finite set of colors, let $k\in\mathbb{N}$ be the maximum
   length of the layout, let $n\in\mathbb{N}$ be the number of tiles, and let
-  $s_{i,j}\in C$ be the symbol on tile $i$ at position $j$, where $1\leq i\leq
+  $s_{i,j}\in C$ be the color on tile $i$ at position $j$, where $1\leq i\leq
   n$ and $0\leq j\leq 2$. (We will assume for simplicity that $C$ is just the
   set $\{1, 2,\ldots, |C|\}$.)
 
   Let variable $x_{i,j}\in\{0, 1\}$, where $1\leq i\leq k$ and $1\leq j\leq
-  |C|$, be defined by $x_{i, j} = 1$ if and only if symbol $j$ is at position
+  |C|$, be defined by $x_{i, j} = 1$ if and only if color $j$ is at position
   $i$. Let variable $y_{i,j}\in\{0, 1\}$, where $1\leq i\leq k-2$ and $1\leq
   j\leq n$, be defined by $y_{i, j} = 1$ if and only if tile $j$ starts at
   position $i$.
@@ -23,11 +23,11 @@ programming solvers to decide these problems.
     \begin{displaymath}
       \sum_{i = 1}^{k - 2}{y_{i, j}} = 1,\,\textnormal{for}\, 1\leq j\leq n
     \end{displaymath}
-  \item[$\cdot$] Each position in the layout must have at most one symbol:
+  \item[$\cdot$] Each position in the layout must have at most one color:
     \begin{displaymath}
       \sum_{j = 1}^{|C|}{x_{i, j}} = 1,\,\textnormal{for}\, 1\leq i\leq k
     \end{displaymath}
-  \item[$\cdot$] The symbols of the layout must correspond to the symbols of
+  \item[$\cdot$] The colors of the layout must correspond to the colors of
     the tiles:
     \begin{displaymath}
       y_{i, j} \leq x_{i + m, s_{j, m}}
